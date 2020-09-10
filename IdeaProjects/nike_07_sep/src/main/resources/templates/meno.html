@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+<form th:action="@{ /form }" th:method="post">
+
+    <div>
+        <input type="text" name="search" id="">
+    </div>
+    <button type="submit"> Rechercher</button>
+</form>
+
+<h1>Première page html</h1>
+
+<h1 th:text="${ firstName }"></h1>
+<h1 th:text="${ age }"></h1>
+
+<h3 th:if="${ age > 18  }">
+    tu es majeur
+</h3>
+
+
+<th:block th:if="${ whatHeader }">
+    <div th:replace="~{ fragments/layouts/header :: ${ whatHeader } }"></div>
+</th:block>
+
+<div th:each="str : ${ listes }">
+    <p style="color: darkred" th:text="${ str }"></p>
+</div>
+
+</body>
+</html>

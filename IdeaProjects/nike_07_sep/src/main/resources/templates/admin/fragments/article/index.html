@@ -1,0 +1,29 @@
+<table class="table table-striped" xmlns:th="http://www.thymeleaf.org">
+    <h1 class="display-4 text-center"> Info de la Bdd</h1>
+
+    <thead>
+    <tr>
+        <th class="text-center" scope="col">Ref</th>
+        <th class="text-center" scope="col">Title</th>
+        <th class="text-center" scope="col">Link</th>
+        <th class="text-center" scope="col">Description</th>
+        <th class="text-center" scope="col">Action</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="art : ${articles}" th:object="${art}">
+        <th class="text-center" scope="row" th:text="*{ref}">1</th>
+        <td class="text-center" th:text="*{title}">Mark</td>
+        <td class="text-center" th:text="*{link}">Otto</td>
+        <td class="text-center" th:text="*{description}">@mdo</td>
+        <td class="text-center">
+            <a th:href="@{|/admin/articles/*{ref}?action=update|}">
+                <button class="btn btn-primary ">Modifier</button>
+            </a>
+            <a th:href="@{|/admin/articles/*{ref}?action=delete|}">
+                <button class="btn btn-danger ">Supprimer</button>
+            </a>
+        </td>
+    </tr>
+    </tbody>
+</table>

@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <title>Nike en Spring</title>
+</head>
+<body>
+
+<div class="container">
+    <th:block th:insert="~{ fragments/layouts/header }"></th:block>
+
+    <th:block th:if="${ fragment }">
+
+        <th:block th:insert="~{ |fragments/${ fragment }| }"></th:block>
+
+    </th:block>
+
+
+    <th:block th:insert="~{ fragments/layouts/footer }"></th:block>
+</div>
+
+
+</body>
+</html>

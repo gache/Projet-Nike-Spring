@@ -1,0 +1,12 @@
+<header xmlns:th="http://www.thymeleaf.org">
+    <nav>
+        <ul>
+            <li><a th:href="@{/}">Home</a></li>
+            <li><a th:href="@{/video}">Video</a></li>
+            <li><a th:href="@{/articles}">Articles</a></li>
+            <li th:unless="${session.user}"><a th:href="@{/inscription}">Inscription</a></li>
+            <li th:if="${session.user}"><a th:href="@{/login}">Logout</a></li>
+            <li th:unless="${session.user}"><a th:href="@{/login}">Login</a></li>
+        </ul>
+    </nav>
+</header>

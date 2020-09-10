@@ -1,0 +1,29 @@
+<form class="p-5" th:action="@{|/admin/articles${action}|}"
+      enctype="multipart/form-data"
+      th:object="${article}"
+      method="post" xmlns:th="http://www.thymeleaf.org"
+>
+    <div class="form-group">
+        <label for="ref">Ref</label>
+        <input type="text" class="form-control" th:field="*{ref}" disabled>
+
+    </div>
+    <div class="form-group">
+        <label for="title">Title</label>
+        <input type="text" class="form-control" th:field="*{title}">
+    </div>
+    <img th:src="@{|/img/*{link}|}" alt="" width="100" height="auto">
+    <div class="custom-file form-group">
+        <label class="custom-file-label" for="image">Link</label>
+        <input type="file"
+               accept="image/jpeg,image/png,image/heic,image/webp"
+               class="form-control custom-file-input"
+               id="image" name="iamge">
+    </div>
+
+    <div class="form-group">
+        <label for="description">Description</label>
+        <textarea class="form-control" th:field="*{description}"></textarea>
+    </div>
+    <button type="submit" class="btn btn-primary">Envoyer</button>
+</form>

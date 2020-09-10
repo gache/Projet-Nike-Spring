@@ -1,0 +1,30 @@
+<section id="form" xmlns:th="http://www.thymeleaf.org">
+    <form th:action="@{/inscription}" method="post" th:object="${user}">
+        <div>
+            <label th:for="lastname">Nom*</label>
+            <input type="text" th:field="*{lastname}" placeholder="Nom">
+            <!-- th:field il remplace l'id et le name-->
+            <div th:if="${#fields.hasErrors('lastname')}" th:errors="*{lastname}" style="color: red"></div>
+        </div>
+        <div>
+            <label th:for="firstname">Prénom*</label>
+            <input type="text" th:field="*{firstname}" placeholder="Prenom">
+            <div th:if="${#fields.hasErrors('firstname')}" th:errors="*{firstname}" style="color: red"></div>
+        </div>
+        <div>
+            <label th:for="email">Email*</label>
+            <input type="email" th:field="*{email}" placeholder="Email">
+            <div th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></div>
+            <div th:if="${emailExist}" th:text="${emailExist}" style="color: red"></div>
+
+        </div>
+        <div>
+            <label th:for="pwd">Mot de passe*</label>
+            <input type="password" th:field="*{mdp}" placeholder="Mot de passe">
+            <div th:if="${#fields.hasErrors('mdp')}" th:errors="*{mdp}" style="color: red"></div>
+        </div>
+        <div>
+            <button type="submit">Valider</button>
+        </div>
+    </form>
+</section>

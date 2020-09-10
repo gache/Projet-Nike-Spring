@@ -1,0 +1,19 @@
+<section id="form" xmlns:th="http://www.thymeleaf.org">
+    <form th:action="@{/login}" method="post" th:object="${user}">
+        <div>
+            <label th:for="email">Email*</label>
+            <input type="email" th:field="*{email}" placeholder="Email">
+            <div th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></div>
+        </div>
+
+        <div>
+            <label th:for="pwd">Mot de passe*</label>
+            <input type="password" th:field="*{mdp}" placeholder="Mot de passe">
+            <div th:if="${#fields.hasErrors('mdp')}" th:errors="*{mdp}" style="color: red"></div>
+        </div>
+        <div th:if="${accountError}" th:text="${accountError}" style="color: red"></div>
+        <div>
+            <button type="submit">Valider</button>
+        </div>
+    </form>
+</section>

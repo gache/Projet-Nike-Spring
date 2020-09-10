@@ -1,0 +1,11 @@
+<section id="articles" xmlns:th="http://www.thymeleaf.org">
+    <article th:each="art : ${ articles }">
+        <figure>
+            <img th:src="@{|img/${art.link}|}" th:alt="${ art.title }">
+            <figcaption>
+                <h4 th:text="${ art.title }"></h4>
+                <p th:text="${ art.description }"></p>
+            </figcaption>
+        </figure>
+    </article>
+</section>
