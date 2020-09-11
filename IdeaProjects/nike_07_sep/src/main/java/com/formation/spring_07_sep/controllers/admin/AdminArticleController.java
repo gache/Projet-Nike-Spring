@@ -6,9 +6,12 @@ import com.formation.spring_07_sep.services.ArticleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import javax.validation.Valid;
 import java.io.*;
 import java.util.Optional;
 
@@ -61,34 +64,46 @@ public class AdminArticleController {
 
     @PostMapping("{ref}")
     public String update(
-            @ModelAttribute(name = "article") Article article,
+            @Valid @ModelAttribute(name = "article") Article article,
+            BindingResult articleBinding,
             @PathVariable Long ref,
             @RequestParam String action,
             @RequestParam(name = "image") MultipartFile image,
-            Model model
+            Model model,
+            RedirectAttributes attributes
     ) {
-        // Todo else si aucun chagement d'image alors remettre le leink précedent
-        if (!image.isEmpty()) {
-            if (image.getContentType().equals("image/jpeg")
+        if (!articleBinding.hasErrors()) {
+
+            boolean isValid = true;
+
+            if (!image.isEmpty() && image.getContentType().equals("image/jpeg")
                     || image.getContentType().equals("image/webp")
                     || image.getContentType().equals("image/heic")
                     || image.getContentType().equals("image/png")
             ) {
-                //  Todo: Verifier la taille de l'image envoie enregistrer
-                //  retourne un erreur au cas ou.
-                article.setLink(image.getOriginalFilename());
-                File img = new File("src/main/resources/static/img" + article.getLink());
+
+                File img = new File("src/main/resources/static/img/" + image.getOriginalFilename());
                 try (BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream(img))) {
                     bos.write(image.getBytes());
-                    articleService.save(article);
-
+                    if (new File("src/main/resources/static/img/" + article.getLink()).delete()) {
+                        article.setLink(image.getOriginalFilename());
+                    }
                 } catch (IOException e) {
-                    e.printStackTrace();
+                    isValid = false;
+                    model.addAttribute("action", "/" + ref + "?action=update");
+                    model.addAttribute("fragment", "article/form");
+                    model.addAttribute("errorMessage", "Un problème de sauvegarde est survenu");
                 }
-                ;
+            }
+
+            if (isValid) {
+                articleService.save(article);
+                attributes.addFlashAttribute("message", "L'article " + ref + " a bien été mis à jour");
+                return "redirect:/admin/articles";
             }
         }
-
+        model.addAttribute("action", "/" + ref + "?action=update");
+        model.addAttribute("fragment", "article/form");
         return "/admin/index";
     }
 
