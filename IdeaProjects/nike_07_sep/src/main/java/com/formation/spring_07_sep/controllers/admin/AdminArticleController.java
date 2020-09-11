@@ -49,7 +49,6 @@ public class AdminArticleController {
                 articleService.delete(ref);
             }
 
-
             return "redirect:/admin/articles";
         }
 
@@ -60,6 +59,53 @@ public class AdminArticleController {
 
         }
         return "admin/index";
+    }
+
+    // Methode pour ajouter un article
+    @GetMapping("add")
+    public String getCreateArticle(Model model, Article article) {
+        model.addAttribute("action", "/add");
+        model.addAttribute("fragment", "article/form");
+        return "admin/index";
+    }
+
+
+    @PostMapping("add")
+    public String postCreateArticle(
+            Model model,
+            @Valid @ModelAttribute(name = "article") Article article,
+            BindingResult articleBinding,
+            @RequestParam(name = "image") MultipartFile image,
+            RedirectAttributes attributes
+    ){
+        if (!articleBinding.hasErrors()) {
+            boolean isValid = true;
+            if (!image.isEmpty() && image.getContentType().equals("image/jpeg")
+                    || image.getContentType().equals("image/webp")
+                    || image.getContentType().equals("image/heic")
+                    || image.getContentType().equals("image/png")
+            ) {
+                File img = new File("src/main/resources/static/img/" + image.getOriginalFilename());
+                try (BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream(img))) {
+                    bos.write(image.getBytes());
+                    article.setLink(image.getOriginalFilename());
+                } catch (IOException e) {
+                    isValid = false;
+                    model.addAttribute("action", "/add");
+                    model.addAttribute("fragment", "article/form");
+                    model.addAttribute("errorMessage", "Un problème de sauvegarde est survenu");
+                }
+            }
+
+            if (isValid) {
+                articleService.save(article);
+                attributes.addFlashAttribute("message", "L'article " + article.getTitle() + " a bien été enregistré");
+                return "redirect:/admin/articles";
+            }
+        }
+        model.addAttribute("action", "/add");
+        model.addAttribute("fragment", "article/form");
+        return "/admin/index";
     }
 
     @PostMapping("{ref}")
